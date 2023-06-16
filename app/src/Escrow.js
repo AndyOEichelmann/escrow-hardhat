@@ -3,7 +3,9 @@ export default function Escrow({
   arbiter,
   beneficiary,
   value,
+  status,
   handleApprove,
+  activeAcount
 }) {
   return (
     <div className="existing-contract">
@@ -18,19 +20,31 @@ export default function Escrow({
         </li>
         <li>
           <div> Value </div>
-          <div> {value} </div>
+          <div> {value} SepoliaETH </div>
         </li>
-        <div
-          className="button"
-          id={address}
-          onClick={(e) => {
-            e.preventDefault();
-
-            handleApprove();
-          }}
-        >
-          Approve
-        </div>
+        <>
+        { !status // verify the status (approved / not aproved) of the contract to change the dispyd information
+          ? activeAcount === arbiter.toLowerCase()
+            // verifyes if the acunt is the arbiter to grant acces for apruval btn
+            ? <div className="button" id={address}
+                onClick={(e) => {
+                  e.preventDefault();
+        
+                  handleApprove();
+                }}>
+                  {console.log('active account:',activeAcount)}
+                  {console.log('arbiter account:',arbiter.toLowerCase())}
+                Approve
+              </div>
+            :
+              <div className="waiting" id={address}>
+                Waiting to be approved ...
+              </div>
+          : <div className="complete" id={address}>
+              ✓ It's been approved!
+            </div> 
+        }
+        </>
       </ul>
     </div>
   );
